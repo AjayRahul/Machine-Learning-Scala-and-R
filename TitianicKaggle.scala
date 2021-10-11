@@ -71,6 +71,13 @@ object TitanicKaggle {
     // exporting the df to a json file to process in RStudio for visualization
     
     res.coalesce(1).write.format("json").save("titanicMlResult")
+    
+    // if to create a confusion matrix
+    
+    val prediction = res.select($"prediction", $"label").as[(Double, Double)].rdd
 
+    val metrics = new MultiClassMetrics(predictoinAndLables)
+    
+    println(metrics.confussionMatrix)
   }
 }
