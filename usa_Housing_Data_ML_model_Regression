@@ -78,6 +78,10 @@ only showing top 10 rows
     val model = trainValidationSplit.fit(training)
 
     model.transform(test).select("features", "label", "Prediction").show()
+
+}
+}
+
     
 +--------------------+------------------+------------------+
 |            features|             label|        Prediction|
@@ -106,6 +110,3 @@ only showing top 10 rows
 only showing top 20 rows
 
 
-  }
-
-}
