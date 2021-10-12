@@ -20,7 +20,7 @@ object usCleanData {
     val df = spark.read.option("header", "true")
       .option("inferSchema", "true")
       .format("csv")
-      .load("C:\\Users\\Lenovo\\Desktop\\Udemy\\Scala ML/Clean_USA_Housing.csv")
+      .load("..Clean_USA_Housing.csv")
 
     df.printSchema()
 
