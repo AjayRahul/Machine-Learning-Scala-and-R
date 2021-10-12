@@ -1,0 +1,59 @@
+package com.sundogsoftware.spark.target
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.ml.regression.LinearRegression
+import org.apache.spark.ml.evaluation.{Evaluator, RegressionEvaluator}
+import org.apache.log4j._
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.sql.functions._
+import org.apache.spark.ml.tuning.{ParamGridBuilder, TrainValidationSplit}
+
+object usCleanData {
+  def main(args: Array[String]):Unit={
+
+    Logger.getLogger("org").setLevel(Level.ERROR)
+
+    val spark = SparkSession
+      .builder()
+      .master("local")
+      .getOrCreate()
+
+    val df = spark.read.option("header", "true")
+      .option("inferSchema", "true")
+      .format("csv")
+      .load("C:\\Users\\Lenovo\\Desktop\\Udemy\\Scala ML/Clean_USA_Housing.csv")
+
+    df.printSchema()
+
+    val sd = df.select(col("Price").as("label"), col("Avg Area Income"), col("Avg Area House Age"), col("Avg Area Number of Rooms"), col("Avg Area Number of Bedrooms"), col("Area Population"))
+
+    sd.show(10)
+
+    val assembler = new VectorAssembler()
+      .setInputCols(Array("Avg Area Income", "Avg Area House Age", "Avg Area Number of Rooms", "Avg Area Number of Bedrooms", "Area Population"))
+      .setOutputCol("features")
+
+    val output = assembler.transform(sd).select(col("label"), col("features"))
+
+    val Array(training, test) = output.select("label", "features").randomSplit(Array(0.7, 0.3), seed=1111)
+
+    val lr = new LinearRegression()
+
+    val paramGrid = new ParamGridBuilder()
+      .addGrid(lr.regParam, Array(10000, 0.1))
+      .build()
+
+    val trainValidationSplit = (new TrainValidationSplit()
+      .setEstimator(lr)
+      .setEvaluator(new RegressionEvaluator())
+      .setEstimatorParamMaps(paramGrid)
+      .setTrainRatio(0.8))
+
+    val model = trainValidationSplit.fit(training)
+
+    model.transform(test).select("features", "label", "Prediction").show()
+
+
+  }
+
+}
