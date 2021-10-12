@@ -1,24 +1,3 @@
----
-title: "Titanic ML visualization"
-author: "Ajay Rahul"
-date: "12/10/2021"
-output: html_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## Introduction
-
-These visualizations are for the Kaggle's Titanic prediction competiton. The datasets are download from the site itself.Details about the competiton and datasets can be seen here https://www.kaggle.com/c/titanic.
-
-
-#### 1.) Installing the necessary packages
-
-The initial data was processed in Spark using Linear Regression to find the prediction Model written in Scala. To view the code, visit https://github.com/AjayRahul/Machine-Learning-Scala-and-R/blob/2f556caaa077b7d08786f232e7aa5358e494f14c/TitianicKaggle.scala
-
-```{r cars, warning=FALSE}
 suppressMessages(library('dplyr'))
 suppressMessages(library('ggplot2'))
 suppressMessages(library('ggthemes'))
@@ -26,49 +5,18 @@ suppressMessages(library('plyr'))
 suppressMessages(library('randomForest'))
 suppressMessages(library('corrplot'))
 
-```
-
-#### 2.) Importing the Dataset
-
-
-```{r pressure}
 train <- read.csv("C:/Users/Lenovo/Desktop/Kaggle/Titanic/train.csv", stringsAsFactors = F)
 test <- read.csv("C:/Users/Lenovo/Desktop/Kaggle/Titanic/test.csv", stringsAsFactors = F)
-```
 
-#### 3.) Combining both the two data into a single table
-
-```{r r1}
 fullDs <- bind_rows(train, test)
-```
-#### 4.) Viewing the data summary and it's structure
 
-```{r r2, echo=TRUE}
- summary(fullDs)
-```
+summary(fullDs)
 
-```{r r3} 
 str(fullDs)
-```
 
-#### 5.) Viewing the Age versus Survived visualization
-```{r r4, echo=TRUE, warning=FALSE}
- ggplot(fullDs[1:891,], aes(Age,fill = factor(Survived)))+geom_histogram(bins = 40)+xlab("Age")+scale_fill_discrete(name = " ", labels = c("Survived", "Dead"))+ggtitle("Age vs Survived")+ylab("Number of person survived")
-```
+ggplot(fullDs[1:891,], aes(Age,fill = factor(Survived)))+geom_histogram(bins = 40)+xlab("Age")+scale_fill_discrete(name = " ", labels = c("Survived", "Dead"))+ggtitle("Age vs Survived")+ylab("Number of person survived")
 
-#### 6.) Viewing the Sex versus Survived visualization
-```{r r5, echo=TRUE, warning=FALSE}
+ggplot(fullDs[1:891,], aes(Sex,fill = factor(Survived)))+geom_bar(stat = "count", position = "dodge")+xlab("Sex")+scale_fill_discrete(name = " " , labels = c("Survived", "Dead"))+ggtitle("Deatils on Survival on the basis of Gender")+ylab("Number of person survived")
 
- ggplot(fullDs[1:891,], aes(Sex,fill = factor(Survived)))+geom_bar(stat = "count", position = "dodge")+xlab("Sex")+scale_fill_discrete(name = " " , labels = c("Survived", "Dead"))+ggtitle("Deatils on Survival on the basis of Gender")+ylab("Number of person survived")
-```
-
-```{r r6, echo=TRUE, warning=FALSE}
 ggplot(fullDs[1:891,], aes(x=Age, y=Sex))+geom_jitter(aes(colour = factor(Survived)))+labs(x="Age", title=" ")+scale_x_continuous(name="Age", limits = c(0,81))+scale_fill_discrete(labels=c("Survived", "Dead"))
-```
-
-
-
-
-
-
-##### Here the legend "0" states "Alive" and 1 states "Dead"
+savehistory("~/R/Git/TitianicKaggleR.Rhistory")
