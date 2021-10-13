@@ -8,7 +8,7 @@ suppressMessages(library('corrplot'))
 train <- read.csv("C:/Users/Lenovo/Desktop/Kaggle/Titanic/train.csv", stringsAsFactors = F)
 test <- read.csv("C:/Users/Lenovo/Desktop/Kaggle/Titanic/test.csv", stringsAsFactors = F)
 
-fullDs <- bind_rows(train, test)
+fullDs <- bind_rows(train, test) 
 
 summary(fullDs)
 
