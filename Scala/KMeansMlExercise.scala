@@ -1,4 +1,3 @@
-package com.sundogsoftware.spark
 import org.apache.spark.sql.SparkSession
 import org.apache.log4j._
 
@@ -8,11 +7,12 @@ object KMeansMlExercise {
 
     val spark = SparkSession.builder().master("local[*]").getOrCreate()
 
-    val df = spark.read.format("csv").load("C:/Users/Lenovo/Desktop/Udemy/Scala ML/Wholesale customers data.csv")
+    val df = spark.read.format("csv").load("/Wholesale customers data.csv")
 
     val kmeans = new Kmeans().setK(2).setSeed(1L)
     val model = kmeans.fit(df)
     val WESS = model.computeCost(df)
+    
     model.clusterCenter.foreach(println)
   }
 }
